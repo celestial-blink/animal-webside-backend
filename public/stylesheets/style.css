@@ -1,0 +1,55 @@
+body {
+  padding: 50px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: #dadada;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.wrapper-header{
+  display: grid;
+  position: relative;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  grid-template-columns: 1fr;
+  width: 100%;
+}
+.wrapper-header img{
+  position: relative;
+  width: 100%;
+  height: 200px;
+  object-position: center;
+}
+
+.wrapper-header p{
+  margin: 0;
+  color: #1a1a1a;
+  text-align: center;
+}
+.wrapper-header a{
+  text-decoration: none;
+  cursor: pointer;
+  border: 3px solid #369742;
+  padding: 10px;
+  border-radius: 20px;
+  margin-top: 20px;
+  transition: all .4s;
+  color: #369742;
+  animation-name: beat;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-direction: alternate;
+}
+.wrapper-header a:hover{
+  background-color: #369742;
+  color: white;
+}
+@keyframes beat{
+  100%{
+    transform: scale(1.1);
+  }
+}
