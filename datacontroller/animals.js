@@ -28,14 +28,7 @@ const selectAction=async(object)=>{
 
 const insertAni=async(object)=>{
     if (verifiedArrayImage(object.inhabitimagenid) && verifiedArray(object.inhabit)){
-        let obj={
-            ...object,
-            ...{inhabit:creartArrayInhabit(object.inhabit)},
-            ...{inhabitimagenid:object.inhabitimagenid.split('|')},
-            ...{tags:object.tags.split(',')}
-        }
-        console.log(obj,"datos convertidos");
-        let ANIMAL=await insertAnimal(obj);
+        let ANIMAL=await insertAnimal(object);
         return ANIMAL;
     }else{
         return{
@@ -47,14 +40,7 @@ const insertAni=async(object)=>{
 
 const updateAni=async(object)=>{
     if (verifiedArrayImage(object.inhabitimagenid) && verifiedArray(object.inhabit)){
-        let obj={
-            ...object,
-            ...{inhabit:creartArrayInhabit(object.inhabit)},
-            ...{inhabitimagenid:object.inhabitimagenid.split('|')},
-            ...{tags:object.tags.split(',')}
-        }
-        console.log(obj,"datos convertidos");
-        let ANIMAL=await updateAnimal(obj);
+        let ANIMAL=await updateAnimal(object);
         return (ANIMAL.info!=null)
                 ?ANIMAL
                 :messageNotFoundAnimal;
@@ -100,30 +86,13 @@ const searchAni=async(object)=>{
 };
 
 
-
-const creartArrayInhabit=(object)=>{
-    let myarray=[];
-    let mainarray=object.split('^');
-    myarray=mainarray.map(ele=>{
-        let secondary=ele.split('|');
-        return secondary;
-    });
-    return myarray;
-}
-
 const verifiedArray=(object)=>{
-    if (object.trim()!=""){
-        let mainarray=object.split('^');
-        if (mainarray.length>0){
-            let show = mainarray.map(da=>{
-                let arr=da.split('|');
-                if (arr.includes('')){
-                    return false;
-                }else{
-                    return (arr.length>1);
-                }
+    if(typeof object !="string" && object!=undefined){
+        if(object.length>0){
+            let verifi=object.map(ele=>{
+                return (ele.length>1);
             });
-            return (show.includes(false))?false:true;
+            return (!(verifi.includes(false)));
         }else{
             return false;
         }
@@ -133,9 +102,12 @@ const verifiedArray=(object)=>{
 };
 
 const verifiedArrayImage=(object)=>{
-    if (object.trim()!=""){
-        let arr=object.split('^');
-        return (arr.length>0);
+    if(typeof object !="string" && object !=undefined){
+        if(object.length>0){
+            return true;
+        }else{
+            return false;
+        }
     }else{
         return false;
     }

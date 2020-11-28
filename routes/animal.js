@@ -8,7 +8,7 @@ let messageSendData="esto voy a enviar";
 let messageTargetError="error aquí";
 let messageGetData="esto me llegó";
 
-let messageSendError="problemas con el servidor, vuelva a intentarlo nuevamente.";
+let messageSendError="se encontró problemas, vuelva a intentarlo nuevamente.";
 
 animal.get('/animal',(req,res)=>{
     console.log(req.query,messageGetData);
@@ -59,7 +59,7 @@ animal.put('/animal/:_id',(req,res)=>{
     });
 });
 
-animal.delete('/animal/:_id',(req,res)=>{
+animal.delete('/animal/:_id',(req,res)=>{   
     let obj={
         ...req.params,
         ...req.body
