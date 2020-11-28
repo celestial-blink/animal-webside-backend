@@ -1,4 +1,4 @@
-let cadena="take,ana,lisbhe,roger,lenny,brizaida,marc";
+let cadena=""
 
 let cont=cadena.split(',');
 
