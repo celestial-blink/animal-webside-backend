@@ -1,4 +1,4 @@
-const {insertUser,updateUser,updateState,deleteUser, getAccess,getUser,getAllUser} = require('../crud/userCRUD');
+const {insertUser,updateUser,updateState,deleteUser, getAccess,getUser,getAllUser,updatePassword} = require('../crud/userCRUD');
 const userModel = require('../models/users');
 
 const selectAction=async(object)=>{
@@ -16,6 +16,9 @@ const selectAction=async(object)=>{
         case'account-active':
         let account=await updateStateU(object);
             return account;
+        case "change-password":
+        let changeP=await changePassword(object); 
+        return changeP;
         case'get-data-user':
         let getUsersExist=await getUserData(object);
             return getUsersExist;
@@ -31,29 +34,21 @@ const selectAction=async(object)=>{
 }
 
 const insertU=async(object)=>{
-    let equality=object.password.trim()==object.repeat.trim();
-    if (equality){
+    let verified=object.password==object.repeat && object.password.trim()!="";
+    if (verified){
         let newUser=await insertUser(object);
         return newUser;
     }else{
-        return {
+        return{
             state:false,
-            info:'las contraseñas no son iguales'
+            info:"las contraseñas no coinciden"
         }
     }
 }
 
 const updateU=async(object)=>{
-    let equality=object.password.trim()==object.repeat.trim();
-    if (equality){
         let newUser=await updateUser(object);
         return (newUser.info!=null)?newUser:{state:false,info:"no se enontró usuario"};
-    }else{
-        return {
-            state:false,
-            info:'las contraseñas no son iguales'
-        }
-    }
 }
 
 const deleteU=async(object)=>{
@@ -110,6 +105,19 @@ const accessAccount=async(object)=>{
     info:modifiedResult(accessC.info)}
     :null;
     return (modifiedAccess!=null)?modifiedAccess:{state:false,info:"error de usuario o contraseña"};
+}
+
+const changePassword=async(object)=>{
+    let verified=(object.password==object.repeat && object.password.trim()!="");
+    if (verified) {
+        let changeP=await updatePassword(object);
+        return (changeP.info!=null)?changeP:{state:false,info:"error de auntentificación"};
+    }else{
+        return {
+            state:false,
+            info:"las contraseñas no coinciden"
+        }
+    }
 }
 
 module.exports = selectAction;

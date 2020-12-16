@@ -61,7 +61,8 @@ const getAllAnimals=async(object)=>{
         _id:1,
         date:1,
         title:1,
-        imagen:1
+        imagen:1,
+        pathimagen:1
     };
     let animals=await Animals.find({}).populate('imagen',imagenKeys)
     .populate({
@@ -119,7 +120,8 @@ const getAnimalFilter=async(object)=>{
         _id:1,
         imagen:1,
         title:1,
-        date:1
+        date:1,
+        pathimagen:1
     }).populate('user',{
         _id:1,
         user:1,
@@ -134,6 +136,23 @@ const getAnimalFilter=async(object)=>{
             page:targetPage
         }
     }
+};
+
+const getAnimalForId=async(object)=>{
+    let forid=await Animals.findById(object._id).populate('imagen',{
+        _id:1,
+        imagen:1,
+        title:1,
+        date:1
+    }).populate('user',{
+        _id:1,
+        user:1,
+        fullname:1
+    });
+    return {
+        state:true,
+        info:forid
+    }
 }
 
 module.exports = {
@@ -142,5 +161,6 @@ module.exports = {
     deleteAnimal,
     getAllAnimals,
     getAnimalForUser,
-    getAnimalFilter
+    getAnimalFilter,
+    getAnimalForId
 }

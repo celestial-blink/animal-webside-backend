@@ -1,4 +1,4 @@
-const {insertKnow,updateKnow,deleteKnow,getAllKnow,getKnowForUser,getKnowFilter} = require('../crud/knowCRUD');
+const {insertKnow,updateKnow,deleteKnow,getAllKnow,getKnowForUser,getKnowFilter,getAllData} = require('../crud/knowCRUD');
 
 let messageNotFoundKnow={state:false,info:"no se encontró ¿sabías qué?"};
 let messageNotFoundResult={state:false,info:"no se encontró resultados"};
@@ -17,6 +17,9 @@ const selectAction=async(object)=>{
         case 'get-data-know':
         let srchknow=await searchKw(object);
             return srchknow;
+        case 'get-all-data':
+        let getall=await getAllDat(object);
+            return getall;
         default:
             return{
                 state:false,
@@ -43,6 +46,12 @@ const deleteKw=async(object)=>{
             ?KNOW
             :messageNotFoundKnow;
 };
+
+const getAllDat=async(object)=>{
+    let getall=await getAllData(object);
+    return (getall.info.length>0)?getall
+    :messageNotFoundResult;
+}
 
 const searchKw=async(object)=>{
     let obj={

@@ -59,6 +59,7 @@ const getAllKnow=async(object)=>{
         _id:1,
         title:1,
         imagen:1,
+        pathimagen:1,
         date:1
     }).skip(start).limit(forPage);
     let pages=Math.ceil(know.length/forPage);
@@ -88,6 +89,7 @@ const getKnowForUser=async(object)=>{
         _id:1,
         title:1,
         imagen:1,
+        pathimagen:1,
         date:1
     }).skip(start).limit(forPage);
     let pages=Math.ceil(know.length/forPage);
@@ -116,6 +118,7 @@ const getKnowFilter=async(object)=>{
         _id:1,
         title:1,
         imagen:1,
+        pathimagen:1,
         date:1
     }).skip(start).limit(forPage);
     let pages=Math.ceil(filter.length/forPage);
@@ -129,6 +132,24 @@ const getKnowFilter=async(object)=>{
     }
 }
 
+const getAllData=async(object)=>{
+    let know=await Know.find().populate('user',{
+        _id:1,
+        email:1,
+        fullname:1,
+        user:1
+    }).populate('imagen',{
+        _id:1,
+        title:1,
+        imagen:1,
+        pathimagen:1,
+        date:1
+    });
+    return {
+        state:true,
+        info:know
+    }
+}
 
 module.exports ={
     insertKnow,
@@ -136,5 +157,6 @@ module.exports ={
     deleteKnow,
     getAllKnow,
     getKnowForUser,
-    getKnowFilter
+    getKnowFilter,
+    getAllData
 };

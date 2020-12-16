@@ -1,4 +1,4 @@
-const {Router, query} = require('express');
+const {Router} = require('express');
 const {responseOK,responseERR} = require('../network/response');
 
 const actionsUser=require('../datacontroller/user');
@@ -17,7 +17,11 @@ login.post('/user',(req,res)=>{
         }
     }).catch(errr=>{
         console.log(errr,"esto en mi error");
-        responseERR(res,"problemas con el servidor inténtelo después");
+        if(errr.name=="ValidationError"){
+            responseERR(res,errr.message);
+        }else{
+            responseERR(res,"problemas con el servidor inténtelo después");
+        };
     })
 });
 
@@ -32,7 +36,11 @@ login.get("/user",(req,res)=>{
         }
     }).catch(errr=>{
         console.log(errr.message,"error aquí");
-        responseERR(res,"problemas con el servidor inténtelo después");
+        if(errr.name="ValidationError"){
+            responseERR(res,errr.message);
+        }else{
+            responseERR(res,"problemas con el servidor inténtelo después");
+        }
     });
 });
 
@@ -51,7 +59,11 @@ login.put('/user/:_id',(req,res)=>{
         }
     }).catch(errr=>{
         console.log(errr.message,"error aquí");
-        responseERR(res,"problemas con el servidor inténtelo después");
+        if(errr.name="ValidationError"){
+            responseERR(res,errr.message);
+        }else{
+            responseERR(res,"problemas con el servidor inténtelo después");
+        }
     });
 });
 
@@ -70,7 +82,11 @@ login.delete('/user/:_id',(req,res)=>{
         }
     }).catch(errr=>{
         console.log(errr.message,"error aqui");
-        responseERR(res,'problemas con el servidor inténtelo después');
+        if(errr.name="ValidationError"){
+            responseERR(res,errr.message);
+        }else{
+            responseERR(res,'problemas con el servidor inténtelo después');
+        }
     });
 
 });
@@ -90,7 +106,11 @@ login.patch('/user/:_id',(req,res)=>{
         }
     }).catch(errr=>{
         console.log(errr.message,"error aqui");
-        responseERR(res,"problemas con el servidor inténtelo después")
+        if(errr.name="ValidationError"){
+            responseERR(res,errr.message);
+        }else{
+            responseERR(res,"problemas con el servidor inténtelo después")
+        }
     });
 });
 

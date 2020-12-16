@@ -1,4 +1,4 @@
-const {insertAnimal,updateAnimal,deleteAnimal,getAllAnimals,getAnimalForUser,getAnimalFilter} =require('../crud//animalsCRUD');
+const {insertAnimal,updateAnimal,deleteAnimal,getAllAnimals,getAnimalForUser,getAnimalFilter,getAnimalForId} =require('../crud//animalsCRUD');
 
 
 let messageNotFoundAnimal={state:false,info:"no se encontró animal"};
@@ -18,6 +18,9 @@ const selectAction=async(object)=>{
         case'get-data-animals':
         let getAnimals=await searchAni(object);
             return getAnimals;
+        case 'get-data-id':
+        let getAnimalFORID=await srcAnimalForID(object);
+            return getAnimalFORID;
         default:
             return{
                 state:false,
@@ -113,7 +116,10 @@ const verifiedArrayImage=(object)=>{
     }
 }
 
-
+const srcAnimalForID=async(object)=>{
+    let forID=await getAnimalForId(object);
+    return (forID.info!=null)?forID:messageNotFoundResult;
+};
 
 module.exports = {
     selectAction

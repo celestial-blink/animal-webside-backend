@@ -3,10 +3,11 @@ require('../models/users');
 
 
 const insertImagen=async(object)=>{
-    //object => {'titkke','path imagen','usuario'}
-        let imagen=new Imagen({
+    //object => {'titkke','path imagen','usuario'}    
+    let imagen=new Imagen({
             title:object.title,
             imagen:object.imagen,
+            pathimagen:`${object.host+object.imagen}`,
             user:object.userid
         });
         console.log(imagen.imagen,"ny");

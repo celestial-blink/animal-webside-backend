@@ -31,7 +31,7 @@ let messageToSend="esto voy a enviar";
 
 const imagen=Router();
 
-imagen.get('/images', (req,res)=>{
+imagen.get('/imagen', (req,res)=>{
     console.log(req.query,messageForWacth);
     selectAction(req.query).then(ress=>{
         console.log(ress,messageToSend);
@@ -46,11 +46,12 @@ imagen.get('/images', (req,res)=>{
     });
 });
 
-imagen.post('/images',pathImagen.any('imagen') ,(req,res)=>{
+imagen.post('/imagen',pathImagen.any('imagen') ,(req,res)=>{
     let imgvalidation=(req.files.length>0)?req.files[0].filename:[];
     let obj = {
         ...{imagen:imgvalidation},
-        ...req.body
+        ...req.body,
+        ...{host:`${req.protocol}://${req.get('host')}/myimages/`}
     };
     console.log(obj,messageForWacth);
     selectAction(obj).then(ress=>{
@@ -66,7 +67,7 @@ imagen.post('/images',pathImagen.any('imagen') ,(req,res)=>{
     });
 });
 
-imagen.patch('/images/:_id', (req,res)=>{
+imagen.patch('/imagen/:_id', (req,res)=>{
     let obj={
         ...req.params,
         ...req.body
@@ -85,7 +86,7 @@ imagen.patch('/images/:_id', (req,res)=>{
     });
 });
 
-imagen.delete('/images/:_id', (req,res)=>{
+imagen.delete('/imagen/:_id', (req,res)=>{
     let obj={
         ...req.params,
         ...req.body

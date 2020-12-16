@@ -14,13 +14,31 @@ const insertUser=async(object)=>{
         return {state:true,info:userSave};
 };
 
+const updatePassword=async(object)=>{
+    let user=await User.findOneAndUpdate(
+        {
+            $and:[
+                {_id:object._id},{password:object.currentpassword}
+            ]
+        },{
+        password:object.password
+    },{
+        new:true
+    }).select({user:1,fullname:1,email:1,_id:1});
+
+    return {
+        state:true,
+        info:user
+    }
+
+}
+
 const updateUser=async(object)=>{
     // object => {'iduser',user','password','fullname','email'}
     let user=await User.findByIdAndUpdate(
         object._id,
         {
             user:object.user,
-            password:object.password,
             fullname:object.fullname,
             email:object.email
         },{
@@ -92,5 +110,6 @@ module.exports={
     deleteUser,
     getUser,
     getAllUser,
-    updateState
+    updateState,
+    updatePassword
 };

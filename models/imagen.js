@@ -10,6 +10,10 @@ const imagenSchema=new Schema({
         type:String,
         required:true
     },
+    pathimagen:{
+        type:String,
+        required:true,
+    },
     user:[{
         type:Schema.Types.ObjectId,
         required:true,
