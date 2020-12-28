@@ -31,8 +31,7 @@ const updateAnimal=async(object)=>{
             inhabit:object.inhabit,
             inhabitImagen:object.inhabitimagenid,
             tags:object.tags,
-            imagen:object.imagenid,
-            user:object.userid
+            imagen:object.imagenid
         },
         {
             new:true

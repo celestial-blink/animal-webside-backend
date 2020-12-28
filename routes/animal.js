@@ -1,5 +1,6 @@
 const {Router} = require('express');
 const {responseOK,responseERR} = require('../network/response');
+const {verifiedSession} =require('../passport/sessionVerified');
 
 const {selectAction}=require('../datacontroller/animals');
 const animal=Router();
@@ -25,7 +26,7 @@ animal.get('/animal',(req,res)=>{
     });
 });
 
-animal.post('/animal',(req,res)=>{
+animal.post('/animal',verifiedSession,(req,res)=>{
     console.log(req.body,messageGetData);
     selectAction(req.body).then(ress=>{
         console.log(ress,messageSendData);
@@ -40,7 +41,7 @@ animal.post('/animal',(req,res)=>{
     })
 });
 
-animal.put('/animal/:_id',(req,res)=>{
+animal.put('/animal/:_id',verifiedSession,(req,res)=>{
     let obj={
         ...req.params,
         ...req.body
@@ -59,7 +60,7 @@ animal.put('/animal/:_id',(req,res)=>{
     });
 });
 
-animal.delete('/animal/:_id',(req,res)=>{   
+animal.delete('/animal/:_id',verifiedSession,(req,res)=>{   
     let obj={
         ...req.params,
         ...req.body

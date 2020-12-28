@@ -6,10 +6,11 @@ const responseOK=(res,info,optional)=>{
     });
 };
 
-const responseERR=(res,info)=>{
+const responseERR=(res,info,optional)=>{
     res.send({
         state:false,
-        info:info
+        info:info,
+        ...optional
     });
 }
 

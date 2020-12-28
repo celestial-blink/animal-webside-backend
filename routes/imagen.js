@@ -22,7 +22,7 @@ let pathImagen=multer({
             cb(null,true);
         }
     }
-});
+}).any('imagen');
 
 let messageERROR="vuelva a intentarlo en otro momento";
 let messageForWacth="esto me llegó";
@@ -46,20 +46,34 @@ imagen.get('/imagen', (req,res)=>{
     });
 });
 
-imagen.post('/imagen',pathImagen.any('imagen') ,(req,res)=>{
-    let imgvalidation=(req.files.length>0)?req.files[0].filename:[];
-    let obj = {
-        ...{imagen:imgvalidation},
-        ...req.body,
-        ...{host:`${req.protocol}://${req.get('host')}/myimages/`}
-    };
-    console.log(obj,messageForWacth);
-    selectAction(obj).then(ress=>{
-        console.log(ress,messageToSend);
-        if (ress.state){
-            responseOK(res,ress.info);
-        }else{
-            responseERR(res, ress.info);
+imagen.post('/imagen',(req,res,next)=>{
+    pathImagen(req,res,(err)=>{
+        if(err){
+            if (err instanceof multer.MulterError){
+                responseERR(res,err.message);
+                return;
+            }
+            console.log(err);
+            responseERR(res,'sin datos');
+            return;
+        }
+        next();
+    }
+    );
+},(req,res)=>{
+        let imgvalidation=(req.files.length>0)?req.files[0].filename:[];
+        let obj = {
+            ...{imagen:imgvalidation},
+            ...req.body,
+            ...{host:`${req.protocol}://${req.get('host')}/myimages/`}
+        };
+        console.log(obj,messageForWacth);
+        selectAction(obj).then(ress=>{
+            console.log(ress,messageToSend);
+            if (ress.state){
+                responseOK(res,ress.info);
+            }else{
+                responseERR(res, ress.info);
         }
     }).catch(errr=>{
         console.log(errr.message,messageForLocationError);

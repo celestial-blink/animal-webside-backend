@@ -4,6 +4,10 @@ const {responseOK,responseERR} = require('../network/response');
 const actionsUser=require('../datacontroller/user');
 const selectAction = require('../datacontroller/user');
 
+
+const passport = require('passport');
+const {verifiedSession}= require('../passport/sessionVerified');
+
 const login = Router();
 
 login.post('/user',(req,res)=>{
@@ -44,7 +48,7 @@ login.get("/user",(req,res)=>{
     });
 });
 
-login.put('/user/:_id',(req,res)=>{
+login.put('/user/:_id',verifiedSession,(req,res)=>{
     let obj={
         ...req.params,
         ...req.body
@@ -67,7 +71,7 @@ login.put('/user/:_id',(req,res)=>{
     });
 });
 
-login.delete('/user/:_id',(req,res)=>{
+login.delete('/user/:_id',verifiedSession,(req,res)=>{
     let obj={
         ...req.params,
         ...req.body
@@ -91,7 +95,7 @@ login.delete('/user/:_id',(req,res)=>{
 
 });
 
-login.patch('/user/:_id',(req,res)=>{
+login.patch('/user/:_id',verifiedSession,(req,res)=>{
     let obj={
         ...req.params,
         ...req.body
@@ -112,6 +116,58 @@ login.patch('/user/:_id',(req,res)=>{
             responseERR(res,"problemas con el servidor inténtelo después")
         }
     });
+});
+
+login.post('/signin',passport.authenticate('local-signin',{
+    failureRedirect:"/user/response/sign-out-in",
+    passReqToCallback:true
+}),(req,res)=>{
+    console.log(req.user);
+    if (req.isAuthenticated()){
+        responseOK(res,req.flash('message-sign')[0])
+    }else{
+        responseERR(res,req.flash('message-sign')[0])
+    }
+}
+);
+
+login.post('/signup',passport.authenticate('local-signup',{
+    successRedirect:"/user/response/sign-out-in?state=true",
+    failureRedirect:"/user/response/sign-out-in",
+    passReqToCallback:true
+})
+);
+
+login.get("/logout",(req,res)=>{
+    req.logOut();
+    if(req.isUnauthenticated()){
+        responseOK(res,'sin session');
+    }else{
+        responseERR(res,'no se pudo cerrar session');
+    }
+
+});
+
+login.get("/user/response/sign-out-in",(req,res)=>{
+    let message=req.flash('message-sign')[0];
+    if(req.query.state){
+        responseOK(res,message);
+    }else{
+        responseERR(res,message);
+        console.log(message);
+    }
+});
+
+login.get('/user/verifiedsession',(req,res)=>{
+    let targetUser=(req.user==undefined)?{}:req.user;
+    let verified=req.isAuthenticated();
+    responseOK(res,{session:verified,user:{
+        _id:targetUser._id,
+        user:targetUser.user,
+        email:targetUser.email,
+        fullname:targetUser.fullname,
+        date:targetUser.date
+    }});
 });
 
 module.exports = login; 

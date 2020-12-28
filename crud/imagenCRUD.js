@@ -3,7 +3,7 @@ require('../models/users');
 
 
 const insertImagen=async(object)=>{
-    //object => {'titkke','path imagen','usuario'}    
+    //object => {'title','path imagen','usuario'}    
     let imagen=new Imagen({
             title:object.title,
             imagen:object.imagen,
@@ -45,15 +45,17 @@ const deleteImagen=async(object)=>{
 
 const getAllImagens=async(object)=>{
     let forPage=10;
-    let targetPage=object.page
+    let targetPage=object.page;
     let start=(targetPage-1)*forPage;
+    let totalPages=await Imagen.find().count();
     let imagens=await Imagen.find().populate('user',{
         _id:1,
         email:1,
         fullname:1,
-        user:1
+        user:1,
+        date:1
     }).skip(start).limit(forPage);
-    let pages=Math.ceil(imagens.length/forPage);
+    let pages=Math.ceil(totalPages/forPage);
     return{
         state:true,
         info:imagens,
@@ -67,7 +69,8 @@ const getAllImagens=async(object)=>{
 const getImagenForUser=async(object)=>{
     // object => {'userid'}
     let forPage=10;
-    let targetPage=object.page
+    let targetPage=object.page;
+    let totalPages=await Imagen.find({user:object.userid}).count();
     let start=(targetPage-1)*forPage;
     let imagens=await Imagen.find({
         user:object.userid
@@ -75,10 +78,11 @@ const getImagenForUser=async(object)=>{
         _id:1,
         email:1,
         fullname:1,
-        user:1
+        user:1,
+        date:1
     }).skip(start).limit(forPage);
     
-    let pages=Math.ceil(imagens.length/forPage);
+    let pages=Math.ceil(totalPages/forPage);
     return{
         state:true,
         info:imagens,
@@ -91,15 +95,17 @@ const getImagenForUser=async(object)=>{
 
 const getImagenFilter=async(object)=>{
     let forPage=10;
-    let targetPage=object.page
+    let targetPage=object.page;
+    let totalPages=await Imagen.find({title:new RegExp(object.filter)}).count();
     let start=(targetPage-1)*forPage;
     let filter=await Imagen.find({title:new RegExp(object.filter)}).populate('user',{
         _id:1,
         email:1,
         fullname:1,
-        user:1
+        user:1,
+        date:1
     }).skip(start).limit(forPage);
-    let pages=Math.ceil(filter.length/forPage);
+    let pages=Math.ceil(totalPages/forPage);
     return{
         state:true,
         info:filter,

@@ -3,6 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const passport = require('passport');
+const session = require('express-session');
+const flash = require('connect-flash');
 
 const routes =require('./routes/routes');
 
@@ -14,6 +17,8 @@ getConnectionDB().then((res)=>{
 }).catch((err)=>{
   console.log(err.message);
 });
+require('./passport/local');
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,9 +27,19 @@ app.set('view engine', 'hbs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '/uploads')));
+
+app.use(cookieParser('blink session'));
+app.use(session({
+  secret:'blink session',
+  resave:true,
+  saveUninitialized:false
+}));
+app.use(flash())
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 //all routes
 routes(app);
