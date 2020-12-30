@@ -3,6 +3,7 @@ const {responseOK,responseERR} = require('../network/response');
 
 const multer = require('multer');
 const {selectAction} = require('../datacontroller/images');
+const { verifiedSession } = require('../passport/sessionVerified');
 
 let storage=multer.diskStorage({
     destination:'uploads/myimages/',
@@ -46,7 +47,7 @@ imagen.get('/imagen', (req,res)=>{
     });
 });
 
-imagen.post('/imagen',(req,res,next)=>{
+imagen.post('/imagen',verifiedSession,(req,res,next)=>{
     pathImagen(req,res,(err)=>{
         if(err){
             if (err instanceof multer.MulterError){
@@ -81,7 +82,7 @@ imagen.post('/imagen',(req,res,next)=>{
     });
 });
 
-imagen.patch('/imagen/:_id', (req,res)=>{
+imagen.patch('/imagen/:_id', verifiedSession,(req,res)=>{
     let obj={
         ...req.params,
         ...req.body
@@ -100,7 +101,7 @@ imagen.patch('/imagen/:_id', (req,res)=>{
     });
 });
 
-imagen.delete('/imagen/:_id', (req,res)=>{
+imagen.delete('/imagen/:_id', verifiedSession,(req,res)=>{
     let obj={
         ...req.params,
         ...req.body

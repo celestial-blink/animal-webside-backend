@@ -2,6 +2,7 @@ const {Router} = require('express');
 const {responseERR,responseOK} = require('../network/response');
 
 const {selectAction} = require('../datacontroller/know');
+const { verifiedSession } = require('../passport/sessionVerified');
 
 const know = Router();
 
@@ -9,7 +10,7 @@ let messageGetData="me llegó estos datos.";
 let messageSendError="problemas con el servidor, vuelve a intentarlo en otro momento";
 let messageSendData="esto voy a enviar.";
 
-know.get('/know', (req,res)=>{
+know.get('/know',(req,res)=>{
     console.log(req.query,messageGetData);
     selectAction(req.query).then(ress=>{
         console.log(ress,messageSendData);
@@ -24,7 +25,7 @@ know.get('/know', (req,res)=>{
     })
 });
 
-know.post('/know', (req,res)=>{
+know.post('/know',verifiedSession ,(req,res)=>{
     console.log(req.body,messageGetData);
     selectAction(req.body).then(ress=>{
         console.log(ress,messageSendData);
@@ -39,7 +40,7 @@ know.post('/know', (req,res)=>{
     })
 });
 
-know.put('/know/:_id', (req,res)=>{
+know.put('/know/:_id',verifiedSession ,(req,res)=>{
     let obj={
         ...req.params,
         ...req.body
@@ -58,7 +59,7 @@ know.put('/know/:_id', (req,res)=>{
     });
 });
 
-know.delete('/know/:_id', (req,res)=>{
+know.delete('/know/:_id', verifiedSession,(req,res)=>{
     let obj={
         ...req.params,
         ...req.body

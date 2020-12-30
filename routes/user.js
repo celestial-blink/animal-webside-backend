@@ -4,7 +4,7 @@ const {responseOK,responseERR} = require('../network/response');
 const actionsUser=require('../datacontroller/user');
 const selectAction = require('../datacontroller/user');
 
-
+//passport
 const passport = require('passport');
 const {verifiedSession}= require('../passport/sessionVerified');
 

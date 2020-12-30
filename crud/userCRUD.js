@@ -42,7 +42,11 @@ const updateUser=async(object)=>{
             fullname:object.fullname,
             email:object.email
         },{
-            new:true
+            new:true,
+            select:{
+                password:0,
+                state:0
+            }
         }
     );
     return {
